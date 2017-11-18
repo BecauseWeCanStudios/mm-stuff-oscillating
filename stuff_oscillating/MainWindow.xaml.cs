@@ -325,6 +325,7 @@ namespace stuff_oscillating
             XDataSeries.Clear();
             SpeedDataSeries.Clear();
             EnergyDataSeries.Clear();
+            PhaseDataSeries.Clear();
             StartBtn.IsEnabled = false;
             StopBtn.IsEnabled = true;
             ImpulseBtn.IsEnabled = true;
