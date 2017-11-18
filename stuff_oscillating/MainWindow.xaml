@@ -60,7 +60,7 @@
                         </s:SciChartSurface.RenderableSeries>
 
                         <s:SciChartSurface.XAxis>
-                            <s:NumericAxis AutoRange="Always" AxisTitle="Time (Seconds)" TextFormatting="0.0"/>
+                            <s:NumericAxis AutoRange="Always" AxisTitle="Время" TextFormatting="0.0"/>
                         </s:SciChartSurface.XAxis>
 
                         <s:SciChartSurface.YAxis>
@@ -76,6 +76,27 @@
                         </s:SciChartSurface.ChartModifier>
                     </s:SciChartSurface>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Фазовый портрет">
+                <TabItem.Resources>
+                  <s:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+                </TabItem.Resources>
+              <Grid>
+                <s:SciChartSurface x:Name="sciPhaseChartSurface">
+                  <s:SciChartSurface.RenderableSeries>
+                            <s:FastLineRenderableSeries x:Name="phaseSeries" Stroke="DarkOrange" StrokeThickness="3"></s:FastLineRenderableSeries>
+                  </s:SciChartSurface.RenderableSeries>
+
+                  <s:SciChartSurface.XAxis>
+                    <s:NumericAxis AutoRange="Always" AxisTitle="Время" TextFormatting="0.0"/>
+                  </s:SciChartSurface.XAxis>
+
+                  <s:SciChartSurface.YAxis>
+                    <s:NumericAxis AutoRange="Always" AxisTitle="Координата" DrawMajorBands="True" GrowBy="0.1, 0.1" TextFormatting="0.00"/>
+                  </s:SciChartSurface.YAxis>
+
+                </s:SciChartSurface>
+              </Grid>
             </TabItem>
             <TabItem Header="ПАРАМЕТРЫ МОДЕЛИ">
                 <Grid ShowGridLines="False">
