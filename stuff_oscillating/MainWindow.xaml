@@ -10,7 +10,8 @@
         xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
         xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        mc:Ignorable="d"
+                   xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+                   mc:Ignorable="d"
         Title="Модель остывания кофе" Height="900" Width="1400"
         GlowBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
@@ -28,7 +29,86 @@
         <dragablz:TabablzControl.InterTabController>
             <dragablz:InterTabController Partition="{StaticResource Partition}" />
         </dragablz:TabablzControl.InterTabController>
-            <TabItem Header="ПАРАМЕТРЫ МОДЕЛИ">
+                <TabItem Header="TEST">
+                <TabItem.Resources>
+
+                    <!--  Converter used by feedback panel below SciChartSurface  -->
+                    <s:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+
+                    <s:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+                    <!--  DataContext is SeriesInfo for each legend row  -->
+                    <!--  This is not part of the example, but just to toggle features on and off such as  -->
+                    <!--  RenderableSeries.IsVisible and setting the SeriesValueModifier.IsSeriesValueModifierEnabled attached property  -->
+                    <DataTemplate x:Key="CustomLegendTemplate" DataType="s:SciChartLegend">
+                        <Grid Margin="2,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Series icon, binds to SeriesInfo.Stroke  -->
+                            <Ellipse Grid.Column="0"
+                         Width="10"
+                         Height="10"
+                         Margin="5,0,20,0"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                         Fill="{Binding Stroke,
+                                        Converter={StaticResource ColorToBrushConverter}}" />
+
+                            <!--  Series name (SeriesInfo.SeriesName)  -->
+                            <TextBlock Grid.Column="1" Width="90" HorizontalAlignment="Center" Text="{Binding SeriesName}"/>
+
+                            <!--  Show or hide the 'Visibility Checkboxes'  -->
+                            <Grid Grid.Column="2" Visibility="{Binding DataContext.ShowVisibilityCheckboxes, ElementName=PART_LegendItems, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                                <!--  Binds to SeriesInfo.IsVisible to show and hide the series  -->
+                                <CheckBox HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
+                                    Content="Visible"
+                                    Foreground="{Binding Stroke,
+                                                   Converter={StaticResource ColorToBrushConverter}}"
+                                    IsChecked="{Binding IsVisible,
+                                                  Mode=TwoWay}" />
+                             </Grid>
+
+                        </Grid>
+                    </DataTemplate>
+
+                </TabItem.Resources>
+
+                <Grid>
+                    <s:SciChartSurface x:Name="sciChartSurface">
+
+                        <s:SciChartSurface.RenderableSeries>
+                            <s:FastLineRenderableSeries x:Name="renderableSeries0" Stroke="DarkOrange" StrokeThickness="2"/>
+                            <s:FastLineRenderableSeries x:Name="renderableSeries1" Stroke="SteelBlue" StrokeThickness="2"/>
+                            <s:FastLineRenderableSeries x:Name="renderableSeries2" Stroke="DarkOliveGreen" StrokeThickness="2"/>
+                        </s:SciChartSurface.RenderableSeries>
+
+                        <s:SciChartSurface.XAxis>
+                            <s:NumericAxis AutoRange="Always" AxisTitle="Time (Seconds)" TextFormatting="0.0"/>
+                        </s:SciChartSurface.XAxis>
+
+                        <s:SciChartSurface.YAxis>
+                            <s:NumericAxis AutoRange="Always"  AxisTitle="Amplitude (Volts)" DrawMajorBands="True" GrowBy="0.1, 0.1" TextFormatting="0.00"/>
+                        </s:SciChartSurface.YAxis>
+
+                        <s:SciChartSurface.ChartModifier>
+                            <s:ModifierGroup>
+                                <s:CursorModifier/>
+                                <s:SeriesValueModifier/>
+                                <s:LegendModifier x:Name="legendModifier" Margin="10" GetLegendDataFor="AllSeries" LegendItemTemplate="{StaticResource CustomLegendTemplate}" ShowLegend="True" ShowVisibilityCheckboxes="True"/>
+                            </s:ModifierGroup>
+                        </s:SciChartSurface.ChartModifier>
+                    </s:SciChartSurface>
+
+                </Grid>
+            </TabItem>
+                <TabItem Header="ПАРАМЕТРЫ МОДЕЛИ">
                 <Grid ShowGridLines="False">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"></RowDefinition>

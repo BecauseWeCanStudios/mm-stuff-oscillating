@@ -111,18 +111,18 @@ namespace stuff_oscillating
             Impulse = 0;
             if (parameters.UseForce)
                 a += parameters.ForceAmplitude * (1 - Math.Cos(2 * Math.PI * time / parameters.ForcePeriod)) / 2;
+            modelStatus.Time = time / 1000;
             modelStatus.Velocity = modelStatus.Velocity + a * parameters.Dt;
             modelStatus.X += modelStatus.Velocity * parameters.Dt;
             modelStatus.Energy = 0.5 * (parameters.ObjectMass * modelStatus.Velocity * modelStatus.Velocity +
                  modelStatus.X * modelStatus.X * parameters.RestrictionCoeffitient);
-            modelStatus.Time = stopwatch.Elapsed.TotalMilliseconds - time;
             ModelTick(null, modelStatus);
         }
 
         public static void Start(ModelParameters new_parameters)
         {
             stopwatch.Start();
-            timer = new Timer(CalculateState, null, 0, 42);
+            timer = new Timer(CalculateState, null, 0, 50);
             new_parameters = parameters;
             modelStatus = new ModelStatus()
             {

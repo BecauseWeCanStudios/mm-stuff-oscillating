@@ -23,6 +23,8 @@ using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using System.IO;
 using CsvHelper;
+using SciChart.Charting.Model.DataSeries;
+using System.Timers;
 
 namespace stuff_oscillating
 {
@@ -31,6 +33,9 @@ namespace stuff_oscillating
     {
 
         static bool IsFirst = true;
+        XyDataSeries<double, double> XDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "X" };
+        XyDataSeries<double, double> SpeedDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "Speed" };
+        XyDataSeries<double, double> EnergyDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "Energy" };
 
         public MainWindow()
         {
@@ -41,10 +46,13 @@ namespace stuff_oscillating
             if (IsFirst)
             {
                 IsFirst = false;
-                this.Closed += OnMainWindowClosed;
+                Closed += OnMainWindowClosed;
             }
             else
-                this.IsCloseButtonEnabled = false;
+                IsCloseButtonEnabled = false;
+            renderableSeries0.DataSeries = XDataSeries;
+            renderableSeries1.DataSeries = SpeedDataSeries;
+            renderableSeries2.DataSeries = EnergyDataSeries;
             DataContext = this;
             Series.Add(new LineSeries()
             {
@@ -60,7 +68,6 @@ namespace stuff_oscillating
             {
                 InitialX = 1
             });
-            //UpdateData(null);
         }
 
         private void OnMainWindowClosed(object sender, EventArgs e)
@@ -72,6 +79,12 @@ namespace stuff_oscillating
 
         void UpdateData(Model.ModelStatus result)
         {
+            using (sciChartSurface.SuspendUpdates())
+            {
+                XDataSeries.Append(result.Time, result.X);
+                SpeedDataSeries.Append(result.Time, result.Velocity);
+                EnergyDataSeries.Append(result.Time, result.Energy);
+            }
             //double time = stopwatch.Elapsed.TotalMilliseconds;
             //List<double> values = new List<double>() { 1 };
             //List<double> v = new List<double>() { 0 };
@@ -91,13 +104,13 @@ namespace stuff_oscillating
             //    PointGeometry = null,
             //    Fill = new SolidColorBrush(),
             //});
-            double a = result.Time;
+            //double a = result.Time;
             //Series.Clear();
-            var series = Series.ElementAt(0);
-            Series.Clear();
-            series.Values.Add(result.X);
-            Series.Add(series);
-            Labels.Add(result.Time.ToString());
+            //var series = Series.ElementAt(0);
+            //Series.Clear();
+            //series.Values.Add(result.X);
+            //Series.Add(series);
+            //Labels.Add(result.Time.ToString());
             //ErrorSeries.Clear();
             //foreach (var it in result.ApproximationData)
             //{
