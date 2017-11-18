@@ -18,11 +18,68 @@ namespace stuff_oscillating
 #pragma warning disable IDE1006 // Стили именования
             public double ω => RestrictionCoeffitient / ObjectMass;
 #pragma warning restore IDE1006 // Стили именования
-            public double ForceAmplitude = 0;
-            public double ForcePeriod = 1;
             public double InitialVelocity = 0;
             public double InitialX  = 1;
             public double Dt = 0.1;
+
+            private static ReaderWriterLockSlim fa_rwlock = new ReaderWriterLockSlim();
+            private double forceAmplitude = 0;
+            public double ForceAmplitude {
+                get
+                {
+                    try
+                    {
+                        fa_rwlock.EnterReadLock();
+                        return forceAmplitude;
+                    }
+                    finally
+                    {
+                        fa_rwlock.ExitReadLock();
+                    }
+                }
+                set
+                {
+                    try
+                    {
+                        fa_rwlock.EnterWriteLock();
+                        forceAmplitude = value;
+                    }
+                    finally
+                    {
+                        fa_rwlock.ExitWriteLock();
+                    }
+                }
+            }
+
+            private static ReaderWriterLockSlim fp_rwlock = new ReaderWriterLockSlim();
+            private double forcePeriod = 1;
+            public double ForcePeriod
+            {
+                get
+                {
+                    try
+                    {
+                        fp_rwlock.EnterReadLock();
+                        return forcePeriod;
+                    }
+                    finally
+                    {
+                        fp_rwlock.ExitReadLock();
+                    }
+                }
+                set
+                {
+                    try
+                    {
+                        fp_rwlock.EnterWriteLock();
+                        forcePeriod = value;
+                    }
+                    finally
+                    {
+                        fp_rwlock.ExitWriteLock();
+                    }
+                }
+            }
 
             private static ReaderWriterLockSlim rwlock = new ReaderWriterLockSlim();
             private bool useForce = false;
@@ -53,6 +110,7 @@ namespace stuff_oscillating
                     }
                 }
             }
+
         }
 
         public class ModelStatus : EventArgs
@@ -105,13 +163,13 @@ namespace stuff_oscillating
 
         private static void CalculateState(object state)
         {
-            double time = stopwatch.Elapsed.TotalMilliseconds;
+            double time = stopwatch.Elapsed.TotalMilliseconds / 1000;
             double a = -parameters.ω * modelStatus.X - parameters.FrictionCoeffitient * modelStatus.Velocity;
             a += Impulse;
             Impulse = 0;
             if (parameters.UseForce)
-                a += parameters.ForceAmplitude * (1 - Math.Cos(2 * Math.PI * time / parameters.ForcePeriod)) / 2;
-            modelStatus.Time = time / 1000;
+               a += parameters.ForceAmplitude * (1 - Math.Cos(2 * Math.PI * time / parameters.ForcePeriod)) / 2;
+            modelStatus.Time = time;
             modelStatus.Velocity = modelStatus.Velocity + a * parameters.Dt;
             modelStatus.X += modelStatus.Velocity * parameters.Dt;
             modelStatus.Energy = 0.5 * (parameters.ObjectMass * modelStatus.Velocity * modelStatus.Velocity +
@@ -123,7 +181,7 @@ namespace stuff_oscillating
         {
             stopwatch.Start();
             timer = new Timer(CalculateState, null, 0, 50);
-            new_parameters = parameters;
+            parameters = new_parameters;
             modelStatus = new ModelStatus()
             {
                 Time = 0,

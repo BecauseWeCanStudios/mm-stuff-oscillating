@@ -50,23 +50,18 @@ namespace stuff_oscillating
             }
             else
                 IsCloseButtonEnabled = false;
-            renderableSeries0.DataSeries = XDataSeries;
-            renderableSeries1.DataSeries = SpeedDataSeries;
-            renderableSeries2.DataSeries = EnergyDataSeries;
+            xSeries.DataSeries = XDataSeries;
+            speedSeries.DataSeries = SpeedDataSeries;
+            energySeries.DataSeries = EnergyDataSeries;
             DataContext = this;
-            Series.Add(new LineSeries()
-            {
-                Title = "X",
-                Values = new ChartValues<double>(),
-                LineSmoothness = 0,
-                PointGeometry = null,
-                Fill = new SolidColorBrush(),
-
-            });
             Model.ModelTick += OnModelTick;
             Model.Start(new Model.ModelParameters
             {
-                InitialX = 1
+                InitialX = 1,
+                ForcePeriod = Math.PI / 2,
+                ForceAmplitude = 2,
+                FrictionCoeffitient = 0,
+                UseForce = true
             });
         }
 
@@ -229,44 +224,13 @@ namespace stuff_oscillating
             }
         }
 
-        public List<string> Labels { get; set; } = new List<string>();
-
-        public SeriesCollection Series { get; set; } = new SeriesCollection();
-
-        public SeriesCollection ErrorSeries { get; set; } = new SeriesCollection();
-
         public ObservableCollection<DataPoint> Data { get; set; } = new ObservableCollection<DataPoint>();
-
-        //public static readonly Dictionary<Model.Methods, string> MethodNames = new Dictionary<Model.Methods, string>()
-        //{
-        //    {Model.Methods.Analytical, "Аналитический" }, {Model.Methods.Euler, "Эйлера" }, {Model.Methods.MEuler, "Мод. Эйлера" }, {Model.Methods.RK4, "Рунге-Кутты" }
-        //};
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        private void ListBox_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var item = ItemsControl.ContainerFromElement(ListBox, (DependencyObject)e.OriginalSource) as ListBoxItem;
-            if (item == null) return;
-            var series = (LineSeries)item.Content;
-            series.Visibility = series.Visibility == Visibility.Visible
-                ? Visibility.Hidden
-                : Visibility.Visible;
-        }
-
-        private void ErrorListBox_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var item = ItemsControl.ContainerFromElement(ErrorListBox, (DependencyObject)e.OriginalSource) as ListBoxItem;
-            if (item == null) return;
-            var series = (LineSeries)item.Content;
-            series.Visibility = series.Visibility == Visibility.Visible
-                ? Visibility.Hidden
-                : Visibility.Visible;
         }
 
         private void DoubleTBPreviewTextInput(object sender, TextCompositionEventArgs e)

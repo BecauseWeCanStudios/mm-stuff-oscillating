@@ -29,17 +29,10 @@
         <dragablz:TabablzControl.InterTabController>
             <dragablz:InterTabController Partition="{StaticResource Partition}" />
         </dragablz:TabablzControl.InterTabController>
-                <TabItem Header="TEST">
+            <TabItem Header="TEST">
                 <TabItem.Resources>
-
-                    <!--  Converter used by feedback panel below SciChartSurface  -->
                     <s:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
-
                     <s:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
-                    <!--  DataContext is SeriesInfo for each legend row  -->
-                    <!--  This is not part of the example, but just to toggle features on and off such as  -->
-                    <!--  RenderableSeries.IsVisible and setting the SeriesValueModifier.IsSeriesValueModifierEnabled attached property  -->
                     <DataTemplate x:Key="CustomLegendTemplate" DataType="s:SciChartLegend">
                         <Grid Margin="2,5">
                             <Grid.ColumnDefinitions>
@@ -48,33 +41,11 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-
-                            <!--  Series icon, binds to SeriesInfo.Stroke  -->
-                            <Ellipse Grid.Column="0"
-                         Width="10"
-                         Height="10"
-                         Margin="5,0,20,0"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Center"
-                         Fill="{Binding Stroke,
-                                        Converter={StaticResource ColorToBrushConverter}}" />
-
-                            <!--  Series name (SeriesInfo.SeriesName)  -->
+                            <Ellipse Grid.Column="0" Width="10" Height="10" Margin="5,0,20,0" HorizontalAlignment="Left" VerticalAlignment="Center" Fill="{Binding Stroke, Converter={StaticResource ColorToBrushConverter}}" />
                             <TextBlock Grid.Column="1" Width="90" HorizontalAlignment="Center" Text="{Binding SeriesName}"/>
-
-                            <!--  Show or hide the 'Visibility Checkboxes'  -->
                             <Grid Grid.Column="2" Visibility="{Binding DataContext.ShowVisibilityCheckboxes, ElementName=PART_LegendItems, Converter={StaticResource BooleanToVisibilityConverter}}">
-
-                                <!--  Binds to SeriesInfo.IsVisible to show and hide the series  -->
-                                <CheckBox HorizontalAlignment="Left"
-                                     VerticalAlignment="Center"
-                                    Content="Visible"
-                                    Foreground="{Binding Stroke,
-                                                   Converter={StaticResource ColorToBrushConverter}}"
-                                    IsChecked="{Binding IsVisible,
-                                                  Mode=TwoWay}" />
-                             </Grid>
-
+                                <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" Content="Показать" Foreground="{Binding Stroke, Converter={StaticResource ColorToBrushConverter}}" IsChecked="{Binding IsVisible, Mode=TwoWay}" />
+                            </Grid>
                         </Grid>
                     </DataTemplate>
 
@@ -82,11 +53,10 @@
 
                 <Grid>
                     <s:SciChartSurface x:Name="sciChartSurface">
-
                         <s:SciChartSurface.RenderableSeries>
-                            <s:FastLineRenderableSeries x:Name="renderableSeries0" Stroke="DarkOrange" StrokeThickness="2"/>
-                            <s:FastLineRenderableSeries x:Name="renderableSeries1" Stroke="SteelBlue" StrokeThickness="2"/>
-                            <s:FastLineRenderableSeries x:Name="renderableSeries2" Stroke="DarkOliveGreen" StrokeThickness="2"/>
+                            <s:FastLineRenderableSeries x:Name="xSeries" Stroke="DarkOrange" StrokeThickness="3"/>
+                            <s:FastLineRenderableSeries x:Name="speedSeries" Stroke="SteelBlue" StrokeThickness="3"/>
+                            <s:FastLineRenderableSeries x:Name="energySeries" Stroke="DarkOliveGreen" StrokeThickness="3"/>
                         </s:SciChartSurface.RenderableSeries>
 
                         <s:SciChartSurface.XAxis>
@@ -94,7 +64,7 @@
                         </s:SciChartSurface.XAxis>
 
                         <s:SciChartSurface.YAxis>
-                            <s:NumericAxis AutoRange="Always"  AxisTitle="Amplitude (Volts)" DrawMajorBands="True" GrowBy="0.1, 0.1" TextFormatting="0.00"/>
+                            <s:NumericAxis AutoRange="Always" DrawMajorBands="True" GrowBy="0.1, 0.1" TextFormatting="0.00"/>
                         </s:SciChartSurface.YAxis>
 
                         <s:SciChartSurface.ChartModifier>
@@ -105,10 +75,9 @@
                             </s:ModifierGroup>
                         </s:SciChartSurface.ChartModifier>
                     </s:SciChartSurface>
-
                 </Grid>
             </TabItem>
-                <TabItem Header="ПАРАМЕТРЫ МОДЕЛИ">
+            <TabItem Header="ПАРАМЕТРЫ МОДЕЛИ">
                 <Grid ShowGridLines="False">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"></RowDefinition>
@@ -621,203 +590,105 @@
 
                 </Grid>
             </TabItem>
-        <TabItem Header="ГРАФИК">
-            <Grid ShowGridLines="False">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="120"></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                        <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition Width="200"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <Grid.Resources>
-                    <local:OpacityConverter x:Key="OpacityConverter"></local:OpacityConverter>
-                </Grid.Resources>
-
-                    <lvc:CartesianChart Name="Plot" Series="{Binding Series}" Hoverable="False" DataTooltip="{x:Null}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" DisableAnimations="True">
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis IsEnabled="True" Labels="{Binding Labels}" ShowLabels="True" FontSize="14"></lvc:Axis>
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis IsMerged="False" FontSize="14"></lvc:Axis>
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
-
-                    <ListBox Name="ListBox" ItemsSource="{Binding Series}" PreviewMouseDown="ListBox_OnPreviewMouseDown" BorderThickness="0" Background="Transparent" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding (lvc:LineSeries.Title)}" 
-                                           Foreground="{Binding (lvc:LineSeries.Stroke)}"
-                                           Opacity="{Binding (lvc:LineSeries.Visibility), Converter={StaticResource OpacityConverter}}"
-                                           FontSize="22"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <ContentPresenter />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
-                </Grid>
-        </TabItem>
-        <TabItem Header="ДАННЫЕ">
-            <Grid ShowGridLines="False">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    </Grid.RowDefinitions>
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="450"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                
-                <Grid.Resources>
-                    <local:StringFormatConverter x:Key="StringFormatConverter"></local:StringFormatConverter>
-                </Grid.Resources>
-
-                <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="7" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center"></GridSplitter>
-                
-                <ListView Name="DataLV" ItemsSource="{Binding Data}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="7">
-                    <ListView.View>
-                        <GridView>
-                            <GridView.Columns>
-                                <GridViewColumn Header="k" DisplayMemberBinding="{Binding PointNumber}"></GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding TimePoint}">
-                                    <GridViewColumnHeader>
-                                        <TextBlock>
-                                            t<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
-                                        </TextBlock>
-                                    </GridViewColumnHeader>
-                                </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding AnalyticalSolutionVal, StringFormat=e3}">
-                                    <GridViewColumnHeader>
-                                        <TextBlock>
-                                            T<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">теор</Run>
-                                        </TextBlock>
-                                    </GridViewColumnHeader>
-                                </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding EulerSolutionVal, StringFormat=e3}">
-                                    <GridViewColumnHeader>
-                                        <TextBlock>
-                                            T<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">Э1</Run>
-                                        </TextBlock>
-                                    </GridViewColumnHeader>
-                                </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding EulerErrorVal, StringFormat=e3}">
-                                    <GridViewColumnHeader>
-                                        <TextBlock>
-                                            &#x03B5;<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">Э1</Run>
-                                        </TextBlock>
-                                    </GridViewColumnHeader>
-                                </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding MEulerSolutionVal, StringFormat=e3}">
-                                    <GridViewColumnHeader>
-                                        <TextBlock>
-                                            T<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">Э2</Run>
-                                        </TextBlock>
-                                    </GridViewColumnHeader>
-                                </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding MEulerErrorVal, StringFormat=e3}">
-                                    <GridViewColumnHeader>
-                                        <TextBlock>
-                                            &#x03B5;<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">Э2</Run>
-                                        </TextBlock>
-                                    </GridViewColumnHeader>
-                                </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding RK4SolutionVal, StringFormat=e3}">
-                                    <GridViewColumnHeader>
-                                        <TextBlock>
-                                            T<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">РК</Run>
-                                        </TextBlock>
-                                    </GridViewColumnHeader>
-                                </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding RK4ErrorVal, StringFormat=e3}">
-                                    <GridViewColumnHeader>
-                                        <TextBlock>
-                                            &#x03B5;<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">РК</Run>
-                                        </TextBlock>
-                                    </GridViewColumnHeader>
-                                </GridViewColumn>
-                            </GridView.Columns>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <Label Name="EuDeLbl" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding EulerDeviation, Converter={StaticResource StringFormatConverter}, ConverterParameter=Средняя ошибка метода Эйлера: {0:e3} }" FontSize="14"></Label>
-                <Label Name="EuErLbl" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding EulerError, Converter={StaticResource StringFormatConverter}, ConverterParameter=Ошибка на последнем шаге метода Эйлера: {0:e3} }" FontSize="14"></Label>
-                <Label Name="MEuDeLbl" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding MEulerDeviation, Converter={StaticResource StringFormatConverter}, ConverterParameter=Средняя ошибка улучш. метода Эйлера: {0:e3} }" FontSize="14"></Label>
-                <Label Name="MEuErLbl" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding MEulerError, Converter={StaticResource StringFormatConverter}, ConverterParameter=Ошибка на последнем шаге улучш. метода Эйлера: {0:e3} }" FontSize="14"></Label>
-                <Label Name="RK4DeLbl" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding RK4Deviation, Converter={StaticResource StringFormatConverter}, ConverterParameter=Средняя ошибка метода Рунге-Кутты: {0:e3} }" FontSize="14"></Label>
-                <Label Name="RK4ErLbl" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding RK4Error, Converter={StaticResource StringFormatConverter}, ConverterParameter=Ошибка на последнем шаге метода Рунге-Кутты: {0:e3} }" FontSize="14"></Label>
-                <Button Name="SaveButton" Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" Click="SaveButton_Click">Сохранить</Button>
-            </Grid>
-        </TabItem>
-            <TabItem Header="ГРАФИК ОШИБКИ">
+            <TabItem Header="ДАННЫЕ">
                 <Grid ShowGridLines="False">
-
-                    <Grid.Resources>
-                        <local:OpacityConverter x:Key="OpacityConverter"></local:OpacityConverter>
-                    </Grid.Resources>
-
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="120"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
                     </Grid.RowDefinitions>
-                    
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition></ColumnDefinition>
-                        <ColumnDefinition Width="200"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="450"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <lvc:CartesianChart Name="ErrorPlot" Series="{Binding ErrorSeries}" Hoverable="False" DataTooltip="{x:Null}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" DisableAnimations="True">
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis IsEnabled="True" Labels="{Binding Labels}" ShowLabels="True" FontSize="14"></lvc:Axis>
-                        </lvc:CartesianChart.AxisX>
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis IsMerged="False" FontSize="14"></lvc:Axis>
-                        </lvc:CartesianChart.AxisY>
-                    </lvc:CartesianChart>
+                    <Grid.Resources>
+                        <local:StringFormatConverter x:Key="StringFormatConverter"></local:StringFormatConverter>
+                    </Grid.Resources>
 
-                    <ListBox Name="ErrorListBox" ItemsSource="{Binding ErrorSeries}" PreviewMouseDown="ErrorListBox_OnPreviewMouseDown" BorderThickness="0" Background="Transparent" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding (lvc:LineSeries.Title)}" 
-                                           Foreground="{Binding (lvc:LineSeries.Stroke)}"
-                                           Opacity="{Binding (lvc:LineSeries.Visibility), Converter={StaticResource OpacityConverter}}"
-                                           FontSize="22"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <ContentPresenter />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
+                    <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="7" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center"></GridSplitter>
+
+                    <ListView Name="DataLV" ItemsSource="{Binding Data}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="7">
+                        <ListView.View>
+                            <GridView>
+                                <GridView.Columns>
+                                    <GridViewColumn Header="k" DisplayMemberBinding="{Binding PointNumber}"></GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding TimePoint}">
+                                        <GridViewColumnHeader>
+                                            <TextBlock>
+                                            t<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
+                                            </TextBlock>
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding AnalyticalSolutionVal, StringFormat=e3}">
+                                        <GridViewColumnHeader>
+                                            <TextBlock>
+                                            T<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">теор</Run>
+                                            </TextBlock>
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding EulerSolutionVal, StringFormat=e3}">
+                                        <GridViewColumnHeader>
+                                            <TextBlock>
+                                            T<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">Э1</Run>
+                                            </TextBlock>
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding EulerErrorVal, StringFormat=e3}">
+                                        <GridViewColumnHeader>
+                                            <TextBlock>
+                                            &#x03B5;<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">Э1</Run>
+                                            </TextBlock>
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding MEulerSolutionVal, StringFormat=e3}">
+                                        <GridViewColumnHeader>
+                                            <TextBlock>
+                                            T<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">Э2</Run>
+                                            </TextBlock>
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding MEulerErrorVal, StringFormat=e3}">
+                                        <GridViewColumnHeader>
+                                            <TextBlock>
+                                            &#x03B5;<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">Э2</Run>
+                                            </TextBlock>
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding RK4SolutionVal, StringFormat=e3}">
+                                        <GridViewColumnHeader>
+                                            <TextBlock>
+                                            T<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">РК</Run>
+                                            </TextBlock>
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding RK4ErrorVal, StringFormat=e3}">
+                                        <GridViewColumnHeader>
+                                            <TextBlock>
+                                            &#x03B5;<Run BaselineAlignment="Subscript" FontSize="10">k</Run><Run BaselineAlignment="Superscript" FontSize="10">РК</Run>
+                                            </TextBlock>
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                </GridView.Columns>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Label Name="EuDeLbl" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding EulerDeviation, Converter={StaticResource StringFormatConverter}, ConverterParameter=Средняя ошибка метода Эйлера: {0:e3} }" FontSize="14"></Label>
+                    <Label Name="EuErLbl" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding EulerError, Converter={StaticResource StringFormatConverter}, ConverterParameter=Ошибка на последнем шаге метода Эйлера: {0:e3} }" FontSize="14"></Label>
+                    <Label Name="MEuDeLbl" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding MEulerDeviation, Converter={StaticResource StringFormatConverter}, ConverterParameter=Средняя ошибка улучш. метода Эйлера: {0:e3} }" FontSize="14"></Label>
+                    <Label Name="MEuErLbl" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding MEulerError, Converter={StaticResource StringFormatConverter}, ConverterParameter=Ошибка на последнем шаге улучш. метода Эйлера: {0:e3} }" FontSize="14"></Label>
+                    <Label Name="RK4DeLbl" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding RK4Deviation, Converter={StaticResource StringFormatConverter}, ConverterParameter=Средняя ошибка метода Рунге-Кутты: {0:e3} }" FontSize="14"></Label>
+                    <Label Name="RK4ErLbl" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left" Content="{Binding RK4Error, Converter={StaticResource StringFormatConverter}, ConverterParameter=Ошибка на последнем шаге метода Рунге-Кутты: {0:e3} }" FontSize="14"></Label>
+                    <Button Name="SaveButton" Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" Click="SaveButton_Click">Сохранить</Button>
                 </Grid>
             </TabItem>
-    </dragablz:TabablzControl>
+        </dragablz:TabablzControl>
     </dockablz:Layout>
 </metro:MetroWindow>
