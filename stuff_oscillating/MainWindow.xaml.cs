@@ -36,6 +36,7 @@ namespace stuff_oscillating
         XyDataSeries<double, double> XDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "X" };
         XyDataSeries<double, double> SpeedDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "Speed" };
         XyDataSeries<double, double> EnergyDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "Energy" };
+        XyDataSeries<double, double> PhaseDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "Phase", AcceptsUnsortedData=true };
 
         public MainWindow()
         {
@@ -50,6 +51,7 @@ namespace stuff_oscillating
             xSeries.DataSeries = XDataSeries;
             speedSeries.DataSeries = SpeedDataSeries;
             energySeries.DataSeries = EnergyDataSeries;
+            phaseSeries.DataSeries = PhaseDataSeries;
             DataContext = this;
             Model.ModelTick += OnModelTick;
         }
@@ -68,6 +70,10 @@ namespace stuff_oscillating
                 XDataSeries.Append(result.Time, result.X);
                 SpeedDataSeries.Append(result.Time, result.Velocity);
                 EnergyDataSeries.Append(result.Time, result.Energy);
+            }
+            using (sciPhaseChartSurface.SuspendUpdates())
+            {
+                PhaseDataSeries.Append(result.X, result.Velocity);
             }
             //double time = stopwatch.Elapsed.TotalMilliseconds;
             //List<double> values = new List<double>() { 1 };
