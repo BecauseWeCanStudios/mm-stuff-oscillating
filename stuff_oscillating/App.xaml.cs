@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace coffee_cooling
+namespace stuff_oscillating
 {
     /// <summary>
     /// Interaction logic for App.xaml

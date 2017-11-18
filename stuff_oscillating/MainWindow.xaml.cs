@@ -24,7 +24,7 @@ using Microsoft.Win32;
 using System.IO;
 using CsvHelper;
 
-namespace coffee_cooling
+namespace stuff_oscillating
 {
     
     public partial class MainWindow : MetroWindow, INotifyPropertyChanged
@@ -46,8 +46,21 @@ namespace coffee_cooling
             else
                 this.IsCloseButtonEnabled = false;
             DataContext = this;
+            Series.Add(new LineSeries()
+            {
+                Title = "X",
+                Values = new ChartValues<double>(),
+                LineSmoothness = 0,
+                PointGeometry = null,
+                Fill = new SolidColorBrush(),
+
+            });
             Model.ModelTick += OnModelTick;
-            //UpdatePlot();
+            Model.Start(new Model.ModelParameters
+            {
+                InitialX = 1
+            });
+            //UpdateData(null);
         }
 
         private void OnMainWindowClosed(object sender, EventArgs e)
@@ -59,8 +72,33 @@ namespace coffee_cooling
 
         void UpdateData(Model.ModelStatus result)
         {
+            //double time = stopwatch.Elapsed.TotalMilliseconds;
+            //List<double> values = new List<double>() { 1 };
+            //List<double> v = new List<double>() { 0 };
+            //for (int i = 1; i < 250; ++i)
+            //{
+            //    double a = -0.1 * values.Last() - 0.1 * v.Last();
+            //    double dt = 0.1;
+            //    v.Add(v.Last() + a * dt);
+            //    values.Add(values.Last() + v.Last() * dt);
+            //}
+            //Series.Clear();
+            //Series.Add(new LineSeries()
+            //{
+            //    Title = "X",
+            //    Values = new ChartValues<double>(values),
+            //    LineSmoothness = 0,
+            //    PointGeometry = null,
+            //    Fill = new SolidColorBrush(),
+            //});
+            double a = result.Time;
+            //Series.Clear();
+            var series = Series.ElementAt(0);
             Series.Clear();
-            ErrorSeries.Clear();
+            series.Values.Add(result.X);
+            Series.Add(series);
+            Labels.Add(result.Time.ToString());
+            //ErrorSeries.Clear();
             //foreach (var it in result.ApproximationData)
             //{
             //    Series.Add(new LineSeries

@@ -1,8 +1,8 @@
-﻿<Application x:Class="coffee_cooling.App"
+﻿<Application x:Class="stuff_oscillating.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
-             xmlns:local="clr-namespace:coffee_cooling"
+             xmlns:local="clr-namespace:stuff_oscillating"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>

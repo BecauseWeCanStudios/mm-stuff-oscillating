@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace coffee_cooling.Properties
+namespace stuff_oscillating.Properties
 {
 
 
