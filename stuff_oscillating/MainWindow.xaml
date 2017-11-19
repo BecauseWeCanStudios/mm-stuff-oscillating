@@ -357,7 +357,7 @@
                                Grid.Column="0" />
                         <TextBox x:Name="MassTB" Grid.Column="1" HorizontalAlignment="Center" Height="23"
                                  Grid.Row="2" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"
-                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="TB_TextChanged"
+                                 PreviewTextInput="DoubleTBPreviewTextInput"
                                  PreviewKeyDown="TB_PreviewKeyDown" />
 
                         <Label Content="Коэффициент упругости" HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -366,7 +366,7 @@
                         <TextBox x:Name="RestrictionCoefficientTB" Grid.Column="1" HorizontalAlignment="Center"
                                  Height="23"
                                  Grid.Row="3" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="50"
-                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="TB_TextChanged"
+                                 PreviewTextInput="DoubleTBPreviewTextInput"
                                  PreviewKeyDown="TB_PreviewKeyDown" />
 
                         <Label Content="Коэффициент трения" HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -376,7 +376,7 @@
                         <TextBox x:Name="FrictionCoefficientTB" Grid.Column="1" HorizontalAlignment="Center"
                                  Height="23"
                                  Grid.Row="4" TextWrapping="Wrap" Text="0.1" VerticalAlignment="Top" Width="50"
-                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="TB_TextChanged"
+                                 PreviewTextInput="DoubleTBPreviewTextInput"
                                  PreviewKeyDown="TB_PreviewKeyDown" />
 
                         <Label Content="Начальная скорость" HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -385,7 +385,7 @@
                         
                         <TextBox x:Name="InitialSpeedTB" Grid.Column="1" HorizontalAlignment="Center" Height="23"
                                  Grid.Row="5" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"
-                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="TB_TextChanged"
+                                 PreviewTextInput="DoubleTBPreviewTextInput"
                                  PreviewKeyDown="TB_PreviewKeyDown" />
 
                         <Label Content="Начальное положение" HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -394,7 +394,7 @@
 
                         <TextBox x:Name="InitialPositionTB" Grid.Column="1" HorizontalAlignment="Center" Height="23"
                                  Grid.Row="6" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"
-                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="TB_TextChanged"
+                                 PreviewTextInput="DoubleTBPreviewTextInput"
                                  PreviewKeyDown="TB_PreviewKeyDown" />
 
                         <Label Content="Амплитуда внешней силы" HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -404,7 +404,7 @@
                         <TextBox x:Name="ExternalForceAmplitudeTB" Grid.Column="1" HorizontalAlignment="Center"
                                  Height="23"
                                  Grid.Row="7" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"
-                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="TB_TextChanged"
+                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="ExternalForceAmplitudeTB_TextChanged"
                                  PreviewKeyDown="TB_PreviewKeyDown" />
 
                         <Label Content="Период действия внешней силы" HorizontalAlignment="Left"
@@ -413,14 +413,14 @@
                         <TextBox x:Name="ExternalForcePeriodTB" Grid.Column="1" HorizontalAlignment="Center"
                                  Height="23"
                                  Grid.Row="8" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"
-                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="TB_TextChanged"
+                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="ExternalForcePeriodTB_TextChanged"
                                  PreviewKeyDown="TB_PreviewKeyDown" />
 
                         <Label Content="Внешняя сила" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="9"
                                Grid.Column="0" />
                         <CheckBox x:Name="ExternalForceCB" Grid.Column="1" Grid.Row="9" Margin="5"
                                   HorizontalAlignment="Center" Height="23" VerticalAlignment="Top"
-                                  Checked="CB_OnChange" Unchecked="CB_OnChange" IsChecked="False" />
+                                  IsChecked="False" Checked="ExternalForceCB_Checked" Unchecked="ExternalForceCB_Checked"/>
 
                         <Label Content="Импульс" HorizontalAlignment="Left"
                                VerticalAlignment="Top" Grid.Row="10"
@@ -428,7 +428,7 @@
                         <TextBox x:Name="ImpulseTB" Grid.Column="1" HorizontalAlignment="Center"
                                  Height="23"
                                  Grid.Row="10" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"
-                                 PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="TB_TextChanged"
+                                 PreviewTextInput="DoubleTBPreviewTextInput"
                                  PreviewKeyDown="TB_PreviewKeyDown" />
 
                     </Grid>

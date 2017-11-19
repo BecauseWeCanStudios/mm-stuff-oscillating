@@ -338,14 +338,6 @@ namespace stuff_oscillating
             e.Handled = !Regex.IsMatch(textBox.Text.Substring(0, pos) + e.Text + textBox.Text.Substring(pos), @"^[-+]?[0-9]*" + decimalSeparator + @"?[0-9]*$");
         }
 
-        private void TB_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (this.IsLoaded)
-            {
-                
-            }
-        }
-
         private void TB_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             e.Handled = e.Key == Key.Space;
@@ -435,14 +427,6 @@ namespace stuff_oscillating
             }
         }
 
-        private void CB_OnChange(object sender, RoutedEventArgs e)
-        {
-            if (this.IsLoaded)
-            {
-//                UpdatePlot();
-            }
-        }
-
         private void StartBtn_OnClick(object sender, RoutedEventArgs e)
         {
             XDataSeries.Clear();
@@ -483,6 +467,15 @@ namespace stuff_oscillating
         {
             min = (double)XDataSeries.YMin;
             max = (double)XDataSeries.YMax;
+        }
+
+        private void ExternalForceAmplitudeTB_TextChanged(object sender, TextChangedEventArgs e) => Model.Parameters.ForceAmplitude = Convert.ToDouble(PassDefaultIfEmpty(ExternalForceAmplitudeTB.Text));
+
+        private void ExternalForcePeriodTB_TextChanged(object sender, TextChangedEventArgs e) => Model.Parameters.ForcePeriod = Convert.ToDouble(PassDefaultIfEmpty(ExternalForcePeriodTB.Text));
+
+        private void ExternalForceCB_Checked(object sender, RoutedEventArgs e)
+        {
+            Model.Parameters.UseForce = ExternalForceCB.IsChecked.Value;
         }
     }
 

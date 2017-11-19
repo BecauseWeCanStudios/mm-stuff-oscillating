@@ -159,6 +159,22 @@ namespace stuff_oscillating
         }
 
         private static ModelParameters parameters = new ModelParameters();
+        public static ModelParameters Parameters
+        {
+            get
+            {
+                try
+                {
+                    param_rwlock.EnterReadLock();
+                    return parameters;
+                }
+                finally
+                {
+                    param_rwlock.ExitReadLock();
+                }
+            }
+        }
+
 
         public static EventHandler<ModelStatus> ModelTick;
 
