@@ -28,12 +28,14 @@
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <dockablz:Layout Partition="{StaticResource Partition}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
+        <dockablz:Layout Partition="{StaticResource Partition}" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1">
             <dragablz:TabablzControl ConsolidateOrphanedItems="True">
                 <dragablz:TabablzControl.InterTabController>
                     <dragablz:InterTabController Partition="{StaticResource Partition}" />
@@ -134,7 +136,7 @@
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="150" />
                         </Grid.ColumnDefinitions>
                         <Label Content="Уравнение модели:" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                                VerticalAlignment="Center" />
@@ -522,8 +524,10 @@
             </dragablz:TabablzControl>
         </dockablz:Layout>
         <Button x:Name="StartBtn" Content="Старт" Grid.Column="0" Grid.Row="0" Click="StartBtn_OnClick" />
-        <Button x:Name="StopBtn" Content="Стоп" Grid.Column="2" Grid.Row="0" Click="StopBtn_OnClick" IsEnabled="False" />
-        <Button x:Name="ImpulseBtn" Content="Импульс" Grid.Column="1" Grid.Row="0" Click="ImpulseBtn_OnClick"
+        <Button x:Name="StopBtn" Content="Стоп" Grid.Column="1" Grid.Row="0" Click="StopBtn_OnClick" IsEnabled="False" />
+        <Button x:Name="PauseButton" Content="Приостановить" Grid.Column="2" Grid.Row="0" Click="PauseButton_Click" IsEnabled="False"/>
+        <Button x:Name="ResumeButton" Content="Продолжить" Grid.Column="3" Grid.Row="0" Click="ResumeButton_Click"  IsEnabled="False"/>
+        <Button x:Name="ImpulseBtn" Content="Импульс" Grid.Column="4" Grid.Row="0" Click="ImpulseBtn_OnClick"
                 IsEnabled="False" />
     </Grid>
 </metro:MetroWindow>

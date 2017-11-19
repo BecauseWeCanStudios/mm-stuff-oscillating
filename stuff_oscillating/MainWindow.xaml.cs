@@ -138,10 +138,10 @@ namespace stuff_oscillating
             {
                 PhaseDataSeries.Append(result.X, result.Velocity);
             }
+            min = Math.Min(min, result.X);
+            max = Math.Max(max, result.X);
             if (animTab.IsSelected)
             {
-                min = Math.Min(min, result.X);
-                max = Math.Max(max, result.X);
                 double k = min != 0 && max != 0
                     ? 800 / (Math.Abs(min) + Math.Abs(max))
                     : 800;
@@ -328,7 +328,7 @@ namespace stuff_oscillating
         private void DoubleTBPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             System.Globalization.CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentCulture;
-            string decimalSeparator = ci.NumberFormat.CurrencyDecimalSeparator;
+            string decimalSeparator = ci.NumberFormat.NumberDecimalSeparator;
             if (decimalSeparator == ".")
             {
                 decimalSeparator = "\\" + decimalSeparator;
@@ -437,6 +437,10 @@ namespace stuff_oscillating
             StartBtn.IsEnabled = false;
             StopBtn.IsEnabled = true;
             ImpulseBtn.IsEnabled = true;
+            PauseButton.IsEnabled = true;
+            ToggleTextBoxes(false);
+            min = Double.PositiveInfinity;
+            max = Double.NegativeInfinity;
             Model.Start(new Model.ModelParameters
             {
                 ObjectMass = Convert.ToDouble(MassTB.Text),
@@ -455,6 +459,9 @@ namespace stuff_oscillating
             StartBtn.IsEnabled = true;
             StopBtn.IsEnabled = false;
             ImpulseBtn.IsEnabled = false;
+            PauseButton.IsEnabled = false;
+            ResumeButton.IsEnabled = false;
+            ToggleTextBoxes(true);
             Model.Stop();
         }
 
@@ -473,10 +480,33 @@ namespace stuff_oscillating
 
         private void ExternalForcePeriodTB_TextChanged(object sender, TextChangedEventArgs e) => Model.Parameters.ForcePeriod = Convert.ToDouble(PassDefaultIfEmpty(ExternalForcePeriodTB.Text));
 
-        private void ExternalForceCB_Checked(object sender, RoutedEventArgs e)
+        private void ExternalForceCB_Checked(object sender, RoutedEventArgs e) => Model.Parameters.UseForce = ExternalForceCB.IsChecked.Value;
+
+        private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-            Model.Parameters.UseForce = ExternalForceCB.IsChecked.Value;
+            PauseButton.IsEnabled = false;
+            ResumeButton.IsEnabled = true;
+            ImpulseBtn.IsEnabled = false;
+            Model.Pause();
         }
+
+        private void ResumeButton_Click(object sender, RoutedEventArgs e)
+        {
+            ResumeButton.IsEnabled = false;
+            PauseButton.IsEnabled = true;
+            ImpulseBtn.IsEnabled = true;
+            Model.Resume();
+        }
+
+        private void ToggleTextBoxes(bool value)
+        {
+            MassTB.IsEnabled = value;
+            RestrictionCoefficientTB.IsEnabled = value;
+            FrictionCoefficientTB.IsEnabled = value;
+            InitialSpeedTB.IsEnabled = value;
+            InitialPositionTB.IsEnabled = value;
+        }
+
     }
 
     public class OpacityConverter : IValueConverter

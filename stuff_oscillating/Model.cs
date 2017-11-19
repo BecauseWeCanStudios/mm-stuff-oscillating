@@ -194,9 +194,21 @@ namespace stuff_oscillating
             ModelTick(null, modelStatus);
         }
 
-        public static void Start(ModelParameters new_parameters)
+        public static void Pause()
+        {
+            timer.Change(Timeout.Infinite, 50);
+            stopwatch.Stop();
+        }
+
+        public static void Resume()
         {
             stopwatch.Start();
+            timer.Change(0, 50);
+        }
+
+        public static void Start(ModelParameters new_parameters)
+        {
+            stopwatch.Restart();
             timer = new Timer(CalculateState, null, 0, 50);
             parameters = new_parameters;
             modelStatus = new ModelStatus()
