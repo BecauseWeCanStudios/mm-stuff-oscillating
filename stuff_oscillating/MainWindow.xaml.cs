@@ -170,9 +170,6 @@ namespace stuff_oscillating
         public MainWindow()
         {
             InitializeComponent();
-            System.Globalization.CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentCulture;
-            string decimalSeparator = ci.NumberFormat.NumberDecimalSeparator;
-            CoolingCoefficientTB.Text = CoolingCoefficientTB.Text.Replace(',', decimalSeparator[0]);
             if (IsFirst)
             {
                 IsFirst = false;
@@ -196,14 +193,6 @@ namespace stuff_oscillating
             Canvas.SetLeft(X1textBlock, 200);
             DataContext = this;
             Model.ModelTick += OnModelTick;
-            Model.Start(new Model.ModelParameters
-            {
-                InitialX = 1,
-                ForcePeriod = Math.PI,
-                ForceAmplitude = 2,
-                FrictionCoeffitient = 0.01,
-                UseForce = false
-            });
         }
 
         private void OnMainWindowClosed(object sender, EventArgs e)
@@ -527,6 +516,49 @@ namespace stuff_oscillating
                 if (phaseSuspender == null)
                     phaseSuspender = sciPhaseChartSurface.SuspendUpdates();
             }
+        }
+
+        private void CB_OnChange(object sender, RoutedEventArgs e)
+        {
+            if (this.IsLoaded)
+            {
+//                UpdatePlot();
+            }
+        }
+
+        private void StartBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            XDataSeries.Clear();
+            SpeedDataSeries.Clear();
+            EnergyDataSeries.Clear();
+            PhaseDataSeries.Clear();
+            StartBtn.IsEnabled = false;
+            StopBtn.IsEnabled = true;
+            ImpulseBtn.IsEnabled = true;
+            Model.Start(new Model.ModelParameters
+            {
+                ObjectMass = Convert.ToDouble(MassTB.Text),
+                InitialX = Convert.ToDouble(InitialPositionTB.Text),
+                InitialVelocity = Convert.ToDouble(InitialSpeedTB.Text),
+                ForcePeriod = Convert.ToDouble(ExternalForcePeriodTB.Text),
+                ForceAmplitude = Convert.ToDouble(ExternalForceAmplitudeTB.Text),
+                FrictionCoeffitient = Convert.ToDouble(FrictionCoefficientTB.Text),
+                RestrictionCoeffitient = Convert.ToDouble(RestrictionCoefficientTB.Text),
+                UseForce = Convert.ToBoolean(ExternalForceCB.IsChecked)
+            });
+        }
+
+        private void StopBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            StartBtn.IsEnabled = true;
+            StopBtn.IsEnabled = false;
+            ImpulseBtn.IsEnabled = false;
+            Model.Stop();
+        }
+
+        private void ImpulseBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            // Impulse
         }
     }
 
