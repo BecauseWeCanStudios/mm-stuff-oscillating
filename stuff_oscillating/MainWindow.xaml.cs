@@ -25,18 +25,147 @@ using System.IO;
 using CsvHelper;
 using SciChart.Charting.Model.DataSeries;
 using System.Timers;
+using SciChart.Core.Framework;
 
 namespace stuff_oscillating
-{
+{ 
+
+    public class MinMaxQueue
+    {
+
+        private Stack<Tuple<double, double>> newMin = new Stack<Tuple<double, double>>();
+        private Stack<Tuple<double, double>> oldMin = new Stack<Tuple<double, double>>();
+
+        private Stack<Tuple<double, double>> newMax = new Stack<Tuple<double, double>>();
+        private Stack<Tuple<double, double>> oldMax = new Stack<Tuple<double, double>>();
+
+        public int Count { get => newMin.Count + oldMin.Count; }
+
+        public double Min
+        {
+            get
+            {
+                if (newMin.Count > 0 && oldMin.Count > 0)
+                    return Math.Min(newMin.Peek().Item2, oldMin.Peek().Item2);
+                else if (oldMin.Count > 0)
+                    return oldMin.Peek().Item2;
+                return newMin.Peek().Item2;
+            }
+        }
+
+        public double Max
+        {
+            get
+            {
+                if (newMax.Count > 0 && oldMax.Count > 0)
+                    return Math.Max(newMax.Peek().Item2, oldMax.Peek().Item2);
+                else if (oldMax.Count > 0)
+                    return oldMax.Peek().Item2;
+                return newMax.Peek().Item2;
+            }
+        }
+
+        public void Enqueue(double item)
+        {
+            if (Count > 0)
+            {
+                newMin.Push(new Tuple<double, double>(item, Math.Min(item, Min)));
+                newMax.Push(new Tuple<double, double>(item, Math.Max(item, Max)));
+            }
+            else
+            {
+                newMin.Push(new Tuple<double, double>(item, item));
+                newMax.Push(new Tuple<double, double>(item, item));
+            }
+        }
+
+        private void MoveMin()
+        {
+            if (oldMin.Count > 0)
+                return;
+            var item = newMin.Pop();
+            oldMin.Push(new Tuple<double, double>(item.Item1, item.Item1));
+            while (newMin.Count > 0)
+            {
+                item = newMin.Pop();
+                oldMin.Push(new Tuple<double, double>(item.Item1, Math.Min(item.Item1, oldMin.Peek().Item2)));
+            }
+        }
+
+        private void MoveMax()
+        {
+            if (oldMax.Count > 0)
+                return;
+            var item = newMax.Pop();
+            oldMax.Push(new Tuple<double, double>(item.Item1, item.Item1));
+            while (newMax.Count > 0)
+            {
+                item = newMax.Pop();
+                double i2 = oldMax.Peek().Item2;
+                oldMax.Push(new Tuple<double, double>(item.Item1, Math.Max(item.Item1, oldMax.Peek().Item2)));
+            }
+        }
+
+        public void Dequeue()
+        {
+            MoveMax();
+            MoveMin();
+            oldMax.Pop();
+            oldMin.Pop();
+        }
+
+    }
     
     public partial class MainWindow : MetroWindow, INotifyPropertyChanged
     {
-
+        MinMaxQueue xValues = new MinMaxQueue();
         static bool IsFirst = true;
         XyDataSeries<double, double> XDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "X" };
         XyDataSeries<double, double> SpeedDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "Speed" };
         XyDataSeries<double, double> EnergyDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "Energy" };
         XyDataSeries<double, double> PhaseDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "Phase", AcceptsUnsortedData=true };
+        IUpdateSuspender chartSuspender = null;
+        IUpdateSuspender phaseSuspender = null;
+        Rectangle rectangle = new Rectangle()
+        {
+            Fill = new SolidColorBrush(Colors.Teal)
+        };
+        Line spring = new Line()
+        {
+            Stroke = new SolidColorBrush(Colors.Black),
+            X1 = 0,
+            X2 = 0,
+            Y1 = 0,
+            Y2 = 0
+        };
+        Line xLine = new Line()
+        {
+            Stroke = new SolidColorBrush(Colors.Black),
+            StrokeThickness = 4,
+            X1 = 200,
+            X2 = 1180,
+            Y1 = 0,
+            Y2 = 0
+        };
+        Line yLine = new Line()
+        {
+            Stroke = new SolidColorBrush(Colors.Black),
+            StrokeThickness = 4,
+            X1 = 0,
+            X2 = 0,
+            Y1 = 100,
+            Y2 = 0
+        };
+        TextBlock X1textBlock = new TextBlock()
+        {
+            Foreground = new SolidColorBrush(Colors.Black),
+            FontSize = 14
+        };
+        TextBlock X2textBlock = new TextBlock()
+        {
+            Foreground = new SolidColorBrush(Colors.Black),
+            FontSize = 14
+        };
 
         public MainWindow()
         {
@@ -55,6 +184,16 @@ namespace stuff_oscillating
             speedSeries.DataSeries = SpeedDataSeries;
             energySeries.DataSeries = EnergyDataSeries;
             phaseSeries.DataSeries = PhaseDataSeries;
+            animCanvas.Children.Add(xLine);
+            animCanvas.Children.Add(yLine);
+            animCanvas.Children.Add(rectangle);
+            animCanvas.Children.Add(spring);
+            animCanvas.Children.Add(X1textBlock);
+            animCanvas.Children.Add(X2textBlock);
+            Canvas.SetLeft(spring, 0);
+            Canvas.SetTop(spring, 360);
+            Canvas.SetLeft(X2textBlock, 1080);
+            Canvas.SetLeft(X1textBlock, 200);
             DataContext = this;
             Model.ModelTick += OnModelTick;
             Model.Start(new Model.ModelParameters
@@ -62,7 +201,7 @@ namespace stuff_oscillating
                 InitialX = 1,
                 ForcePeriod = Math.PI,
                 ForceAmplitude = 2,
-                FrictionCoeffitient = -0.1,
+                FrictionCoeffitient = 0.01,
                 UseForce = false
             });
         }
@@ -76,6 +215,9 @@ namespace stuff_oscillating
 
         void UpdateData(Model.ModelStatus result)
         {
+            xValues.Enqueue(result.X);
+            if (xValues.Count > 500)
+                xValues.Dequeue();
             using (sciChartSurface.SuspendUpdates())
             {
                 XDataSeries.Append(result.Time, result.X);
@@ -85,6 +227,40 @@ namespace stuff_oscillating
             using (sciPhaseChartSurface.SuspendUpdates())
             {
                 PhaseDataSeries.Append(result.X, result.Velocity);
+            }
+            if (animTab.IsSelected)
+            {
+                double min = xValues.Min;
+                double max = xValues.Max;
+                double k = min != 0 && max != 0
+                    ? 800 / (Math.Abs(min) + Math.Abs(max))
+                    : 800;
+                k = Math.Min(k, 800);
+                k = Math.Max(k, 20);
+                rectangle.Width = k / 4;
+                rectangle.Height = k / 4;
+                spring.X2 = 200 + (result.X - min) * k;
+                spring.StrokeThickness = 1 + (80 * Math.Cos((spring.X2 - 200) * Math.PI / 1600)) * k / 800;
+                spring.Stroke = new SolidColorBrush(new Color()
+                {
+                    R = result.X < 0 ? (byte)(Math.Cos((result.X - min) * Math.PI / 2 / Math.Abs(min)) * 255) : (byte)0,
+                    G = (byte)(Math.Abs(Math.Sin((spring.X2 - 200) * Math.PI / 800)) * 255),
+                    B = result.X > 0 ? (byte)(Math.Cos((max - result.X) * Math.PI / 2 / Math.Abs(max)) * 255) : (byte)0,
+                    A = 255
+                });
+                Canvas.SetTop(rectangle, 360 - rectangle.Height / 2);
+                Canvas.SetLeft(rectangle, spring.X2);
+                Canvas.SetLeft(yLine, 200 - min * k + rectangle.Width / 2);
+                double bottom = 360 + rectangle.Height / 2;
+                Canvas.SetTop(xLine, bottom);
+                Canvas.SetTop(X1textBlock, bottom + 10);
+                Canvas.SetTop(X2textBlock, bottom + 10);
+                yLine.Y2 = bottom + 20;
+                yLine.Y1 = bottom - 20;
+                xLine.X2 = 200 + (max - min) * k + rectangle.Width;
+                X1textBlock.Text = min.ToString("N2");
+                X2textBlock.Text = max.ToString("N2");
+                Canvas.SetLeft(X2textBlock, Math.Min(xLine.X2, 1200));
             }
             //double time = stopwatch.Elapsed.TotalMilliseconds;
             //List<double> values = new List<double>() { 1 };
@@ -321,6 +497,36 @@ namespace stuff_oscillating
                 file.Dispose();
             }
                 //File.WriteAllText(saveFileDialog.FileName, txtEditor.Text);
+        }
+
+        private void TabablzControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PlotTab.IsSelected)
+            {
+                if (chartSuspender != null)
+                {
+                    chartSuspender.Dispose();
+                    chartSuspender = null;
+                }
+            }
+            else
+            {
+                if (chartSuspender == null)
+                    chartSuspender = sciChartSurface.SuspendUpdates();
+            }
+            if (PhaseTab.IsSelected)
+            {
+                if (phaseSuspender != null)
+                {
+                    phaseSuspender.Dispose();
+                    phaseSuspender = null;
+                }
+            }
+            else
+            {
+                if (phaseSuspender == null)
+                    phaseSuspender = sciPhaseChartSurface.SuspendUpdates();
+            }
         }
     }
 
