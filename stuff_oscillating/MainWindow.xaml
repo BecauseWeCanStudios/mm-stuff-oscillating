@@ -40,84 +40,6 @@
                 <dragablz:TabablzControl.InterTabController>
                     <dragablz:InterTabController Partition="{StaticResource Partition}" />
                 </dragablz:TabablzControl.InterTabController>
-                <TabItem Header="ГРАФИК" x:Name="PlotTab">
-                    <TabItem.Resources>
-                        <s:ColorToBrushConverter x:Key="ColorToBrushConverter" />
-                        <s:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                        <DataTemplate x:Key="CustomLegendTemplate" DataType="s:SciChartLegend">
-                            <Grid Margin="2,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Ellipse Grid.Column="0" Width="10" Height="10" Margin="5,0,20,0"
-                                         HorizontalAlignment="Left" VerticalAlignment="Center"
-                                         Fill="{Binding Stroke, Converter={StaticResource ColorToBrushConverter}}" />
-                                <TextBlock Grid.Column="1" Width="90" HorizontalAlignment="Center"
-                                           Text="{Binding SeriesName}" />
-                                <Grid Grid.Column="2"
-                                      Visibility="{Binding DataContext.ShowVisibilityCheckboxes, ElementName=PART_LegendItems, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" Content="Показать"
-                                              Foreground="{Binding Stroke, Converter={StaticResource ColorToBrushConverter}}"
-                                              IsChecked="{Binding IsVisible, Mode=TwoWay}" />
-                                </Grid>
-                            </Grid>
-                        </DataTemplate>
-
-                    </TabItem.Resources>
-
-                    <Grid>
-                        <s:SciChartSurface x:Name="sciChartSurface">
-                            <s:SciChartSurface.RenderableSeries>
-                                <s:FastLineRenderableSeries x:Name="xSeries" Stroke="DarkOrange" StrokeThickness="3" />
-                                <s:FastLineRenderableSeries x:Name="speedSeries" Stroke="SteelBlue" StrokeThickness="3" />
-                                <s:FastLineRenderableSeries x:Name="energySeries" Stroke="DarkOliveGreen"
-                                                            StrokeThickness="3" />
-                            </s:SciChartSurface.RenderableSeries>
-
-                            <s:SciChartSurface.XAxis>
-                                <s:NumericAxis AutoRange="Always" AxisTitle="Время" TextFormatting="0.0" />
-                            </s:SciChartSurface.XAxis>
-
-                            <s:SciChartSurface.YAxis>
-                                <s:NumericAxis AutoRange="Always" DrawMajorBands="True" GrowBy="0.1, 0.1"
-                                               TextFormatting="0.00" />
-                            </s:SciChartSurface.YAxis>
-
-                        <s:SciChartSurface.ChartModifier>
-                            <s:ModifierGroup>
-                                <s:CursorModifier/>
-                                <s:SeriesValueModifier/>
-                                <s:LegendModifier x:Name="legendModifier" Margin="10" GetLegendDataFor="AllSeries" LegendItemTemplate="{StaticResource CustomLegendTemplate}" ShowLegend="True" ShowVisibilityCheckboxes="True"/>
-                            </s:ModifierGroup>
-                        </s:SciChartSurface.ChartModifier>
-                    </s:SciChartSurface>
-                </Grid>
-            </TabItem>
-            <TabItem Header="ФАЗОВЫЙ ПОРТРЕТ" x:Name="PhaseTab">
-                <TabItem.Resources>
-                  <s:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
-                </TabItem.Resources>
-              <Grid>
-                <s:SciChartSurface x:Name="sciPhaseChartSurface">
-                  <s:SciChartSurface.RenderableSeries>
-                            <s:FastLineRenderableSeries x:Name="phaseSeries" Stroke="DarkOrange" StrokeThickness="3"></s:FastLineRenderableSeries>
-                  </s:SciChartSurface.RenderableSeries>
-
-                            <s:SciChartSurface.XAxis>
-                                <s:NumericAxis AutoRange="Always" AxisTitle="Время" TextFormatting="0.0" />
-                            </s:SciChartSurface.XAxis>
-
-                            <s:SciChartSurface.YAxis>
-                                <s:NumericAxis AutoRange="Always" AxisTitle="Координата" DrawMajorBands="True"
-                                               GrowBy="0.1, 0.1" TextFormatting="0.00" />
-                            </s:SciChartSurface.YAxis>
-
-                        </s:SciChartSurface>
-                    </Grid>
-                </TabItem>
                 <TabItem Header="ПАРАМЕТРЫ МОДЕЛИ">
                     <Grid ShowGridLines="False">
                         <Grid.RowDefinitions>
@@ -360,7 +282,7 @@
                         <TextBox x:Name="MassTB" Grid.Column="1" HorizontalAlignment="Center" Height="23"
                                  Grid.Row="2" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"
                                  PreviewTextInput="DoubleTBPreviewTextInput"
-                                 PreviewKeyDown="TB_PreviewKeyDown" />
+                                 PreviewKeyDown="TB_PreviewKeyDown" Foreground="{StaticResource IdealForegroundColorBrush}"/>
 
                         <Label Content="Коэффициент упругости" HorizontalAlignment="Left" VerticalAlignment="Top"
                                Grid.Row="3"
@@ -369,7 +291,7 @@
                                  Height="23"
                                  Grid.Row="3" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="50"
                                  PreviewTextInput="DoubleTBPreviewTextInput"
-                                 PreviewKeyDown="TB_PreviewKeyDown" />
+                                 PreviewKeyDown="TB_PreviewKeyDown" Foreground="{StaticResource IdealForegroundColorBrush}"/>
 
                         <Label Content="Коэффициент трения" HorizontalAlignment="Left" VerticalAlignment="Top"
                                Grid.Row="4"
@@ -379,7 +301,7 @@
                                  Height="23"
                                  Grid.Row="4" TextWrapping="Wrap" Text="0.1" VerticalAlignment="Top" Width="50"
                                  PreviewTextInput="DoubleTBPreviewTextInput"
-                                 PreviewKeyDown="TB_PreviewKeyDown" />
+                                 PreviewKeyDown="TB_PreviewKeyDown" Foreground="{StaticResource IdealForegroundColorBrush}"/>
 
                         <Label Content="Начальная скорость" HorizontalAlignment="Left" VerticalAlignment="Top"
                                Grid.Row="5"
@@ -388,7 +310,7 @@
                         <TextBox x:Name="InitialSpeedTB" Grid.Column="1" HorizontalAlignment="Center" Height="23"
                                  Grid.Row="5" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"
                                  PreviewTextInput="DoubleTBPreviewTextInput"
-                                 PreviewKeyDown="TB_PreviewKeyDown" />
+                                 PreviewKeyDown="TB_PreviewKeyDown" Foreground="{StaticResource IdealForegroundColorBrush}"/>
 
                         <Label Content="Начальное положение" HorizontalAlignment="Left" VerticalAlignment="Top"
                                Grid.Row="6"
@@ -397,7 +319,7 @@
                         <TextBox x:Name="InitialPositionTB" Grid.Column="1" HorizontalAlignment="Center" Height="23"
                                  Grid.Row="6" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"
                                  PreviewTextInput="DoubleTBPreviewTextInput"
-                                 PreviewKeyDown="TB_PreviewKeyDown" />
+                                 PreviewKeyDown="TB_PreviewKeyDown" Foreground="{StaticResource IdealForegroundColorBrush}"/>
 
                         <Label Content="Амплитуда внешней силы" HorizontalAlignment="Left" VerticalAlignment="Top"
                                Grid.Row="7"
@@ -407,7 +329,7 @@
                                  Height="23"
                                  Grid.Row="7" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50"
                                  PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="ExternalForceAmplitudeTB_TextChanged"
-                                 PreviewKeyDown="TB_PreviewKeyDown" />
+                                 PreviewKeyDown="TB_PreviewKeyDown" Foreground="{StaticResource IdealForegroundColorBrush}" />
 
                         <Label Content="Период действия внешней силы" HorizontalAlignment="Left"
                                VerticalAlignment="Top" Grid.Row="8"
@@ -416,13 +338,13 @@
                                  Height="23"
                                  Grid.Row="8" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"
                                  PreviewTextInput="DoubleTBPreviewTextInput" TextChanged="ExternalForcePeriodTB_TextChanged"
-                                 PreviewKeyDown="TB_PreviewKeyDown" />
+                                 PreviewKeyDown="TB_PreviewKeyDown" Foreground="{StaticResource IdealForegroundColorBrush}"/>
 
                         <Label Content="Внешняя сила" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="9"
                                Grid.Column="0" />
                         <CheckBox x:Name="ExternalForceCB" Grid.Column="1" Grid.Row="9" Margin="5"
                                   HorizontalAlignment="Center" Height="23" VerticalAlignment="Top"
-                                  IsChecked="False" Checked="ExternalForceCB_Checked" Unchecked="ExternalForceCB_Checked"/>
+                                  IsChecked="False" Checked="ExternalForceCB_Checked" Unchecked="ExternalForceCB_Checked" Foreground="{StaticResource IdealForegroundColorBrush}"/>
 
                         <Label Content="Импульс" HorizontalAlignment="Left"
                                VerticalAlignment="Top" Grid.Row="10"
@@ -431,8 +353,86 @@
                                  Height="23"
                                  Grid.Row="10" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="50"
                                  PreviewTextInput="DoubleTBPreviewTextInput"
-                                 PreviewKeyDown="TB_PreviewKeyDown" />
+                                 PreviewKeyDown="TB_PreviewKeyDown" Foreground="{StaticResource IdealForegroundColorBrush}"/>
 
+                    </Grid>
+                </TabItem>
+                <TabItem Header="ГРАФИК" x:Name="PlotTab">
+                    <TabItem.Resources>
+                        <s:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+                        <s:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                        <DataTemplate x:Key="CustomLegendTemplate" DataType="s:SciChartLegend">
+                            <Grid Margin="2,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Ellipse Grid.Column="0" Width="10" Height="10" Margin="5,0,20,0"
+                                         HorizontalAlignment="Left" VerticalAlignment="Center"
+                                         Fill="{Binding Stroke, Converter={StaticResource ColorToBrushConverter}}" />
+                                <TextBlock Grid.Column="1" Width="90" HorizontalAlignment="Center"
+                                           Text="{Binding SeriesName}" />
+                                <Grid Grid.Column="2"
+                                      Visibility="{Binding DataContext.ShowVisibilityCheckboxes, ElementName=PART_LegendItems, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" Content="Показать"
+                                              Foreground="{Binding Stroke, Converter={StaticResource ColorToBrushConverter}}"
+                                              IsChecked="{Binding IsVisible, Mode=TwoWay}" />
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+
+                    </TabItem.Resources>
+
+                    <Grid>
+                        <s:SciChartSurface x:Name="sciChartSurface">
+                            <s:SciChartSurface.RenderableSeries>
+                                <s:FastLineRenderableSeries x:Name="xSeries" Stroke="DarkOrange" StrokeThickness="3" />
+                                <s:FastLineRenderableSeries x:Name="speedSeries" Stroke="SteelBlue" StrokeThickness="3" />
+                                <s:FastLineRenderableSeries x:Name="energySeries" Stroke="DarkOliveGreen"
+                                                            StrokeThickness="3" />
+                            </s:SciChartSurface.RenderableSeries>
+
+                            <s:SciChartSurface.XAxis>
+                                <s:NumericAxis AutoRange="Always" AxisTitle="Время" TextFormatting="0.0" />
+                            </s:SciChartSurface.XAxis>
+
+                            <s:SciChartSurface.YAxis>
+                                <s:NumericAxis AutoRange="Always" DrawMajorBands="True" GrowBy="0.1, 0.1"
+                                               TextFormatting="0.00" />
+                            </s:SciChartSurface.YAxis>
+
+                            <s:SciChartSurface.ChartModifier>
+                                <s:ModifierGroup>
+                                    <s:CursorModifier/>
+                                    <s:SeriesValueModifier/>
+                                    <s:LegendModifier x:Name="legendModifier" Margin="10" GetLegendDataFor="AllSeries" LegendItemTemplate="{StaticResource CustomLegendTemplate}" ShowLegend="True" ShowVisibilityCheckboxes="True"/>
+                                </s:ModifierGroup>
+                            </s:SciChartSurface.ChartModifier>
+                        </s:SciChartSurface>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="ФАЗОВЫЙ ПОРТРЕТ" x:Name="PhaseTab">
+                    <TabItem.Resources>
+                        <s:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+                    </TabItem.Resources>
+                    <Grid>
+                        <s:SciChartSurface x:Name="sciPhaseChartSurface">
+                            <s:SciChartSurface.RenderableSeries>
+                                <s:FastLineRenderableSeries x:Name="phaseSeries" Stroke="DarkOrange" StrokeThickness="3"></s:FastLineRenderableSeries>
+                            </s:SciChartSurface.RenderableSeries>
+
+                            <s:SciChartSurface.XAxis>
+                                <s:NumericAxis AutoRange="Always" AxisTitle="Координата" TextFormatting="0.0" />
+                            </s:SciChartSurface.XAxis>
+
+                            <s:SciChartSurface.YAxis>
+                                <s:NumericAxis AutoRange="Always" AxisTitle="Скорсоть" DrawMajorBands="True"
+                                               GrowBy="0.1, 0.1" TextFormatting="0.00" />
+                            </s:SciChartSurface.YAxis>
+
+                        </s:SciChartSurface>
                     </Grid>
                 </TabItem>
                 <TabItem Header="ДАННЫЕ">
@@ -475,7 +475,7 @@
                                             </GridViewColumnHeader>
                                         </GridViewColumn>
                                         <GridViewColumn
-                                            DisplayMemberBinding="{Binding X, StringFormat=e3}">
+                                            DisplayMemberBinding="{Binding X, StringFormat=n3}">
                                             <GridViewColumnHeader>
                                                 <TextBlock>
                                                     x<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
@@ -483,14 +483,14 @@
                                             </GridViewColumnHeader>
                                         </GridViewColumn>
                                         <GridViewColumn
-                                            DisplayMemberBinding="{Binding V, StringFormat=e3}">
+                                            DisplayMemberBinding="{Binding V, StringFormat=n3}">
                                             <GridViewColumnHeader>
                                                 <TextBlock>
                                                     v<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
                                                 </TextBlock>
                                             </GridViewColumnHeader>
                                         </GridViewColumn>
-                                        <GridViewColumn DisplayMemberBinding="{Binding E, StringFormat=e3}">
+                                        <GridViewColumn DisplayMemberBinding="{Binding E, StringFormat=n3}">
                                             <GridViewColumnHeader>
                                                 <TextBlock>
                                                     E<Run BaselineAlignment="Subscript" FontSize="10">k</Run>

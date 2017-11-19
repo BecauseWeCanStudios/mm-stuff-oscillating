@@ -46,7 +46,7 @@ namespace stuff_oscillating
         };
         Line spring = new Line()
         {
-            Stroke = new SolidColorBrush(Colors.Black),
+            Stroke = new SolidColorBrush(Colors.White),
             X1 = 0,
             X2 = 0,
             Y1 = 0,
@@ -54,7 +54,7 @@ namespace stuff_oscillating
         };
         Line xLine = new Line()
         {
-            Stroke = new SolidColorBrush(Colors.Black),
+            Stroke = new SolidColorBrush(Colors.White),
             StrokeThickness = 4,
             X1 = 200,
             X2 = 1180,
@@ -63,7 +63,7 @@ namespace stuff_oscillating
         };
         Line yLine = new Line()
         {
-            Stroke = new SolidColorBrush(Colors.Black),
+            Stroke = new SolidColorBrush(Colors.White),
             StrokeThickness = 4,
             X1 = 0,
             X2 = 0,
@@ -72,12 +72,12 @@ namespace stuff_oscillating
         };
         TextBlock X1textBlock = new TextBlock()
         {
-            Foreground = new SolidColorBrush(Colors.Black),
+            Foreground = new SolidColorBrush(Colors.White),
             FontSize = 14
         };
         TextBlock X2textBlock = new TextBlock()
         {
-            Foreground = new SolidColorBrush(Colors.Black),
+            Foreground = new SolidColorBrush(Colors.White),
             FontSize = 14
         };
         double min = Double.PositiveInfinity;
