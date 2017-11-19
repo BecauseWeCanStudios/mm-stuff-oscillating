@@ -449,7 +449,6 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="450" />
                         </Grid.ColumnDefinitions>
 
                         <Grid.Resources>
@@ -500,24 +499,7 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <Label Name="EuDeLbl" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"
-                               Content="{Binding EulerDeviation, Converter={StaticResource StringFormatConverter}, ConverterParameter=Средняя ошибка метода Эйлера: {0:e3} }"
-                               FontSize="14" />
-                        <Label Name="EuErLbl" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"
-                               Content="{Binding EulerError, Converter={StaticResource StringFormatConverter}, ConverterParameter=Ошибка на последнем шаге метода Эйлера: {0:e3} }"
-                               FontSize="14" />
-                        <Label Name="MEuDeLbl" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left"
-                               Content="{Binding MEulerDeviation, Converter={StaticResource StringFormatConverter}, ConverterParameter=Средняя ошибка улучш. метода Эйлера: {0:e3} }"
-                               FontSize="14" />
-                        <Label Name="MEuErLbl" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left"
-                               Content="{Binding MEulerError, Converter={StaticResource StringFormatConverter}, ConverterParameter=Ошибка на последнем шаге улучш. метода Эйлера: {0:e3} }"
-                               FontSize="14" />
-                        <Label Name="RK4DeLbl" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left"
-                               Content="{Binding RK4Deviation, Converter={StaticResource StringFormatConverter}, ConverterParameter=Средняя ошибка метода Рунге-Кутты: {0:e3} }"
-                               FontSize="14" />
-                        <Label Name="RK4ErLbl" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left"
-                               Content="{Binding RK4Error, Converter={StaticResource StringFormatConverter}, ConverterParameter=Ошибка на последнем шаге метода Рунге-Кутты: {0:e3} }"
-                               FontSize="14" />
+                        
                         <Button Name="SaveButton" Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left"
                                 Click="SaveButton_Click">
                             Сохранить
