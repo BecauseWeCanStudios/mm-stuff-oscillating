@@ -25,6 +25,7 @@ using System.IO;
 using CsvHelper;
 using SciChart.Charting.Model.DataSeries;
 using System.Timers;
+using SciChart.Core.Extensions;
 using SciChart.Core.Framework;
 
 namespace stuff_oscillating
@@ -207,6 +208,14 @@ namespace stuff_oscillating
             xValues.Enqueue(result.X);
             if (xValues.Count > 500)
                 xValues.Dequeue();
+            Data.Add(new DataPoint()
+            {
+                PointNumber = Data.IsEmpty() ? 1 : Data.Last().PointNumber + 1,
+                TimePoint = result.Time,
+                X = result.X,
+                V = result.Velocity,
+                E = result.Energy,
+            });
             using (sciChartSurface.SuspendUpdates())
             {
                 XDataSeries.Append(result.Time, result.X);
@@ -421,7 +430,7 @@ namespace stuff_oscillating
         {
             if (this.IsLoaded)
             {
-                //UpdatePlot();
+                
             }
         }
 
@@ -473,13 +482,9 @@ namespace stuff_oscillating
                 {
                     csv.WriteField(item.PointNumber);
                     csv.WriteField(item.TimePoint);
-                    csv.WriteField(item.AnalyticalSolutionVal);
-                    csv.WriteField(item.EulerSolutionVal);
-                    csv.WriteField(item.EulerErrorVal);
-                    csv.WriteField(item.MEulerSolutionVal);
-                    csv.WriteField(item.MEulerErrorVal);
-                    csv.WriteField(item.RK4SolutionVal);
-                    csv.WriteField(item.RK4ErrorVal);
+                    csv.WriteField(item.X);
+                    csv.WriteField(item.V);
+                    csv.WriteField(item.E);
                     csv.NextRecord();
                 }
                 file.Close();
@@ -532,6 +537,7 @@ namespace stuff_oscillating
             SpeedDataSeries.Clear();
             EnergyDataSeries.Clear();
             PhaseDataSeries.Clear();
+            Data.Clear();
             StartBtn.IsEnabled = false;
             StopBtn.IsEnabled = true;
             ImpulseBtn.IsEnabled = true;
@@ -558,7 +564,7 @@ namespace stuff_oscillating
 
         private void ImpulseBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            // Impulse
+            Model.Impulse = Convert.ToDouble(ImpulseTB.Text);
         }
     }
 
@@ -582,13 +588,9 @@ namespace stuff_oscillating
     {
         public int PointNumber { get; set; }
         public double TimePoint { get; set; }
-        public double AnalyticalSolutionVal { get; set; }
-        public double EulerSolutionVal { get; set; }
-        public double EulerErrorVal { get; set; }
-        public double MEulerSolutionVal { get; set; }
-        public double MEulerErrorVal { get; set; }
-        public double RK4SolutionVal { get; set; }
-        public double RK4ErrorVal { get; set; }
+        public double X { get; set; }
+        public double V { get; set; }
+        public double E { get; set; }
     }
 
     [ValueConversion(typeof(object), typeof(string))]

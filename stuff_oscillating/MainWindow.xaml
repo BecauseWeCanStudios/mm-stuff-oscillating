@@ -474,63 +474,25 @@
                                             </GridViewColumnHeader>
                                         </GridViewColumn>
                                         <GridViewColumn
-                                            DisplayMemberBinding="{Binding AnalyticalSolutionVal, StringFormat=e3}">
+                                            DisplayMemberBinding="{Binding X, StringFormat=e3}">
                                             <GridViewColumnHeader>
                                                 <TextBlock>
-                                                    T<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
-                                                    <Run BaselineAlignment="Superscript" FontSize="10">теор</Run>
+                                                    x<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
                                                 </TextBlock>
                                             </GridViewColumnHeader>
                                         </GridViewColumn>
                                         <GridViewColumn
-                                            DisplayMemberBinding="{Binding EulerSolutionVal, StringFormat=e3}">
+                                            DisplayMemberBinding="{Binding V, StringFormat=e3}">
                                             <GridViewColumnHeader>
                                                 <TextBlock>
-                                                    T<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
-                                                    <Run BaselineAlignment="Superscript" FontSize="10">Э1</Run>
+                                                    v<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
                                                 </TextBlock>
                                             </GridViewColumnHeader>
                                         </GridViewColumn>
-                                        <GridViewColumn DisplayMemberBinding="{Binding EulerErrorVal, StringFormat=e3}">
+                                        <GridViewColumn DisplayMemberBinding="{Binding E, StringFormat=e3}">
                                             <GridViewColumnHeader>
                                                 <TextBlock>
-                                                    &#x03B5;<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
-                                                    <Run BaselineAlignment="Superscript" FontSize="10">Э1</Run>
-                                                </TextBlock>
-                                            </GridViewColumnHeader>
-                                        </GridViewColumn>
-                                        <GridViewColumn
-                                            DisplayMemberBinding="{Binding MEulerSolutionVal, StringFormat=e3}">
-                                            <GridViewColumnHeader>
-                                                <TextBlock>
-                                                    T<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
-                                                    <Run BaselineAlignment="Superscript" FontSize="10">Э2</Run>
-                                                </TextBlock>
-                                            </GridViewColumnHeader>
-                                        </GridViewColumn>
-                                        <GridViewColumn
-                                            DisplayMemberBinding="{Binding MEulerErrorVal, StringFormat=e3}">
-                                            <GridViewColumnHeader>
-                                                <TextBlock>
-                                                    &#x03B5;<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
-                                                    <Run BaselineAlignment="Superscript" FontSize="10">Э2</Run>
-                                                </TextBlock>
-                                            </GridViewColumnHeader>
-                                        </GridViewColumn>
-                                        <GridViewColumn
-                                            DisplayMemberBinding="{Binding RK4SolutionVal, StringFormat=e3}">
-                                            <GridViewColumnHeader>
-                                                <TextBlock>
-                                                    T<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
-                                                    <Run BaselineAlignment="Superscript" FontSize="10">РК</Run>
-                                                </TextBlock>
-                                            </GridViewColumnHeader>
-                                        </GridViewColumn>
-                                        <GridViewColumn DisplayMemberBinding="{Binding RK4ErrorVal, StringFormat=e3}">
-                                            <GridViewColumnHeader>
-                                                <TextBlock>
-                                                    &#x03B5;<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
-                                                    <Run BaselineAlignment="Superscript" FontSize="10">РК</Run>
+                                                    E<Run BaselineAlignment="Subscript" FontSize="10">k</Run>
                                                 </TextBlock>
                                             </GridViewColumnHeader>
                                         </GridViewColumn>
