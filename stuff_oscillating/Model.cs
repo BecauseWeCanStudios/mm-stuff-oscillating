@@ -122,7 +122,7 @@ namespace stuff_oscillating
         }
 
         private static ReaderWriterLockSlim imp_rwlock = new ReaderWriterLockSlim();
-        private static ReaderWriterLockSlim tick_rwlock = new ReaderWriterLockSlim();
+        private static ReaderWriterLockSlim param_rwlock = new ReaderWriterLockSlim();
 
         private static Stopwatch stopwatch = new Stopwatch();
         private static Timer timer = null;
@@ -159,6 +159,7 @@ namespace stuff_oscillating
         }
 
         private static ModelParameters parameters = new ModelParameters();
+
         public static EventHandler<ModelStatus> ModelTick;
 
         private static void CalculateState(object state)

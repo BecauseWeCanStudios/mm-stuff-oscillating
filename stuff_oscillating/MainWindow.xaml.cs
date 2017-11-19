@@ -30,96 +30,9 @@ using SciChart.Core.Framework;
 
 namespace stuff_oscillating
 { 
-
-    public class MinMaxQueue
-    {
-
-        private Stack<Tuple<double, double>> newMin = new Stack<Tuple<double, double>>();
-        private Stack<Tuple<double, double>> oldMin = new Stack<Tuple<double, double>>();
-
-        private Stack<Tuple<double, double>> newMax = new Stack<Tuple<double, double>>();
-        private Stack<Tuple<double, double>> oldMax = new Stack<Tuple<double, double>>();
-
-        public int Count { get => newMin.Count + oldMin.Count; }
-
-        public double Min
-        {
-            get
-            {
-                if (newMin.Count > 0 && oldMin.Count > 0)
-                    return Math.Min(newMin.Peek().Item2, oldMin.Peek().Item2);
-                else if (oldMin.Count > 0)
-                    return oldMin.Peek().Item2;
-                return newMin.Peek().Item2;
-            }
-        }
-
-        public double Max
-        {
-            get
-            {
-                if (newMax.Count > 0 && oldMax.Count > 0)
-                    return Math.Max(newMax.Peek().Item2, oldMax.Peek().Item2);
-                else if (oldMax.Count > 0)
-                    return oldMax.Peek().Item2;
-                return newMax.Peek().Item2;
-            }
-        }
-
-        public void Enqueue(double item)
-        {
-            if (Count > 0)
-            {
-                newMin.Push(new Tuple<double, double>(item, Math.Min(item, Min)));
-                newMax.Push(new Tuple<double, double>(item, Math.Max(item, Max)));
-            }
-            else
-            {
-                newMin.Push(new Tuple<double, double>(item, item));
-                newMax.Push(new Tuple<double, double>(item, item));
-            }
-        }
-
-        private void MoveMin()
-        {
-            if (oldMin.Count > 0)
-                return;
-            var item = newMin.Pop();
-            oldMin.Push(new Tuple<double, double>(item.Item1, item.Item1));
-            while (newMin.Count > 0)
-            {
-                item = newMin.Pop();
-                oldMin.Push(new Tuple<double, double>(item.Item1, Math.Min(item.Item1, oldMin.Peek().Item2)));
-            }
-        }
-
-        private void MoveMax()
-        {
-            if (oldMax.Count > 0)
-                return;
-            var item = newMax.Pop();
-            oldMax.Push(new Tuple<double, double>(item.Item1, item.Item1));
-            while (newMax.Count > 0)
-            {
-                item = newMax.Pop();
-                double i2 = oldMax.Peek().Item2;
-                oldMax.Push(new Tuple<double, double>(item.Item1, Math.Max(item.Item1, oldMax.Peek().Item2)));
-            }
-        }
-
-        public void Dequeue()
-        {
-            MoveMax();
-            MoveMin();
-            oldMax.Pop();
-            oldMin.Pop();
-        }
-
-    }
     
     public partial class MainWindow : MetroWindow, INotifyPropertyChanged
     {
-        MinMaxQueue xValues = new MinMaxQueue();
         static bool IsFirst = true;
         XyDataSeries<double, double> XDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "X" };
         XyDataSeries<double, double> SpeedDataSeries = new XyDataSeries<double, double>() { FifoCapacity = 500, SeriesName = "Speed" };
@@ -167,6 +80,8 @@ namespace stuff_oscillating
             Foreground = new SolidColorBrush(Colors.Black),
             FontSize = 14
         };
+        double min = Double.PositiveInfinity;
+        double max = Double.NegativeInfinity;
 
         public MainWindow()
         {
@@ -205,9 +120,6 @@ namespace stuff_oscillating
 
         void UpdateData(Model.ModelStatus result)
         {
-            xValues.Enqueue(result.X);
-            if (xValues.Count > 500)
-                xValues.Dequeue();
             Data.Add(new DataPoint()
             {
                 PointNumber = Data.IsEmpty() ? 1 : Data.Last().PointNumber + 1,
@@ -228,8 +140,8 @@ namespace stuff_oscillating
             }
             if (animTab.IsSelected)
             {
-                double min = xValues.Min;
-                double max = xValues.Max;
+                min = Math.Min(min, result.X);
+                max = Math.Max(max, result.X);
                 double k = min != 0 && max != 0
                     ? 800 / (Math.Abs(min) + Math.Abs(max))
                     : 800;
@@ -242,7 +154,7 @@ namespace stuff_oscillating
                 spring.Stroke = new SolidColorBrush(new Color()
                 {
                     R = result.X < 0 ? (byte)(Math.Cos((result.X - min) * Math.PI / 2 / Math.Abs(min)) * 255) : (byte)0,
-                    G = (byte)(Math.Abs(Math.Sin((spring.X2 - 200) * Math.PI / 800)) * 255),
+                    G = (byte)(Math.Abs(Math.Sin((result.X - min) * Math.PI / (Math.Abs(min) + Math.Abs(max)))) * 255),
                     B = result.X > 0 ? (byte)(Math.Cos((max - result.X) * Math.PI / 2 / Math.Abs(max)) * 255) : (byte)0,
                     A = 255
                 });
@@ -565,6 +477,12 @@ namespace stuff_oscillating
         private void ImpulseBtn_OnClick(object sender, RoutedEventArgs e)
         {
             Model.Impulse = Convert.ToDouble(ImpulseTB.Text);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            min = (double)XDataSeries.YMin;
+            max = (double)XDataSeries.YMax;
         }
     }
 
