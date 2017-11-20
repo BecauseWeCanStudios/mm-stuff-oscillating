@@ -172,148 +172,11 @@ namespace stuff_oscillating
                 X2textBlock.Text = max.ToString("N2");
                 Canvas.SetLeft(X2textBlock, Math.Min(xLine.X2, 1200));
             }
-            //double time = stopwatch.Elapsed.TotalMilliseconds;
-            //List<double> values = new List<double>() { 1 };
-            //List<double> v = new List<double>() { 0 };
-            //for (int i = 1; i < 250; ++i)
-            //{
-            //    double a = -0.1 * values.Last() - 0.1 * v.Last();
-            //    double dt = 0.1;
-            //    v.Add(v.Last() + a * dt);
-            //    values.Add(values.Last() + v.Last() * dt);
-            //}
-            //Series.Clear();
-            //Series.Add(new LineSeries()
-            //{
-            //    Title = "X",
-            //    Values = new ChartValues<double>(values),
-            //    LineSmoothness = 0,
-            //    PointGeometry = null,
-            //    Fill = new SolidColorBrush(),
-            //});
-            //double a = result.Time;
-            //Series.Clear();
-            //var series = Series.ElementAt(0);
-            //Series.Clear();
-            //series.Values.Add(result.X);
-            //Series.Add(series);
-            //Labels.Add(result.Time.ToString());
-            //ErrorSeries.Clear();
-            //foreach (var it in result.ApproximationData)
-            //{
-            //    Series.Add(new LineSeries
-            //    {
-            //        Title = MethodNames[it.Key],
-            //        Values = new ChartValues<double>(it.Value.Values),
-            //        LineSmoothness = 0,
-            //        PointGeometry = null,
-            //        Fill = new SolidColorBrush(),
-            //    });
-            //    if (it.Value.Error == null)
-            //        continue;
-            //    ErrorSeries.Add(new LineSeries()
-            //    {
-            //        Title = MethodNames[it.Key],
-            //        Values = new ChartValues<double>(it.Value.Error),
-            //        LineSmoothness = 0,
-            //        PointGeometry = null,
-            //        Fill = new SolidColorBrush(),
-            //    });
-            //};
-            //Labels.Clear();
-            //Labels.AddRange(result.ArgumentValues.ConvertAll(new Converter<double, string>((double x) => { return x.ToString(); })));
-            //Data.Clear();
-            //using (var n = (from i in Enumerable.Range(0, result.ArgumentValues.Count()) select i).GetEnumerator())
-            //using (var anlv = result.ApproximationData[Model.Methods.Analytical].Values.GetEnumerator())
-            //using (var eulv = result.ApproximationData[Model.Methods.Euler].Values.GetEnumerator())
-            //using (var eule = result.ApproximationData[Model.Methods.Euler].Error.GetEnumerator())
-            //using (var meulv = result.ApproximationData[Model.Methods.MEuler].Values.GetEnumerator())
-            //using (var meule = result.ApproximationData[Model.Methods.MEuler].Error.GetEnumerator())
-            //using (var rk4v = result.ApproximationData[Model.Methods.RK4].Values.GetEnumerator())
-            //using (var rk4e = result.ApproximationData[Model.Methods.RK4].Error.GetEnumerator())
-            //using (var time = result.ArgumentValues.GetEnumerator())
-            //{
-            //    while (n.MoveNext() && anlv.MoveNext() && eulv.MoveNext() && eule.MoveNext() && meulv.MoveNext() && meule.MoveNext() && rk4v.MoveNext() && rk4e.MoveNext() && time.MoveNext())
-            //    {
-            //        Data.Add(new DataPoint
-            //        {
-            //            PointNumber = n.Current,
-            //            TimePoint = time.Current,
-            //            AnalyticalSolutionVal = anlv.Current,
-            //            EulerSolutionVal = eulv.Current,
-            //            EulerErrorVal = eule.Current,
-            //            MEulerSolutionVal = meulv.Current,
-            //            MEulerErrorVal = meule.Current,
-            //            RK4SolutionVal = rk4v.Current,
-            //            RK4ErrorVal = rk4e.Current,
-            //        });
-            //    }
-            //}
-            //EulerDeviation = result.ApproximationData[Model.Methods.Euler].StandardDeviation;
-            //EulerError = result.ApproximationData[Model.Methods.Euler].Error.Last();
-            //MEulerDeviation = result.ApproximationData[Model.Methods.MEuler].StandardDeviation;
-            //MEulerError = result.ApproximationData[Model.Methods.MEuler].Error.Last();
-            //RK4Deviation = result.ApproximationData[Model.Methods.RK4].StandardDeviation;
-            //RK4Error = result.ApproximationData[Model.Methods.RK4].Error.Last();
         }
 
         void OnModelTick(object sender, Model.ModelStatus result)
         {
             Dispatcher.Invoke(new UpdateDataDelegate(UpdateData), result);
-        }
-
-        private double _eulerDeviation;
-        public double EulerDeviation {
-            get { return _eulerDeviation; }
-            set {
-                _eulerDeviation = value;
-                OnPropertyChanged("EulerDeviation");
-            }
-        }
-
-        private double _eulerError;
-        public double EulerError {
-            get { return _eulerError; }
-            set {
-                _eulerError = value;
-                OnPropertyChanged("EulerError");
-            }
-        }
-
-        private double _meulerDeviation;
-        public double MEulerDeviation {
-            get { return _meulerDeviation; }
-            set {
-                _meulerDeviation = value;
-                OnPropertyChanged("MEulerDeviation");
-            }
-        }
-
-        private double _meulerError;
-        public double MEulerError {
-            get { return _meulerError; }
-            set {
-                _meulerError = value;
-                OnPropertyChanged("MEulerError");
-            }
-        }
-
-        private double _rK4Deviation;
-        public double RK4Deviation {
-            get { return _rK4Deviation; }
-            set {
-                _rK4Deviation = value;
-                OnPropertyChanged("RK4Deviation");
-            }
-        }
-
-        private double _rK4Error;
-        public double RK4Error {
-            get { return _rK4Error; }
-            set {
-                _rK4Error = value;
-                OnPropertyChanged("RK4Error");
-            }
         }
 
         public ObservableCollection<DataPoint> Data { get; set; } = new ObservableCollection<DataPoint>();
@@ -352,26 +215,6 @@ namespace stuff_oscillating
             return s;
         }
 
-        //private void UpdatePlot() => Model.BeginCalculation(new Model.Parameters()
-        //{
-        //    InitialTemperature = Convert.ToDouble(PassDefaultIfEmpty(StartTempTB.Text)),
-        //    CoolingCoefficient = Convert.ToDouble(PassDefaultIfEmpty(CoolingCoefficientTB.Text)),
-        //    EnvironmentTemperature = Convert.ToDouble(PassDefaultIfEmpty(AmbientTempTB.Text)),
-        //    SegmentCount = Convert.ToInt32(PassDefaultIfEmpty(SegmentCountTB.Text)),
-        //    TimeRange = Convert.ToDouble(PassDefaultIfEmpty(TimeRangeTB.Text)),
-        //    Methods = new List<Model.Methods>()
-        //        {
-        //            Model.Methods.Analytical, Model.Methods.Euler, Model.Methods.MEuler, Model.Methods.RK4
-        //        }
-        //});
-
-        private void IntTB_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            var pos = textBox.CaretIndex;
-            e.Handled = !Regex.IsMatch(textBox.Text.Substring(0, pos) + e.Text + textBox.Text.Substring(pos), @"^[-+]?[0-9]*$");
-        }
-
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
@@ -394,7 +237,6 @@ namespace stuff_oscillating
                 file.Close();
                 file.Dispose();
             }
-                //File.WriteAllText(saveFileDialog.FileName, txtEditor.Text);
         }
 
         private void TabablzControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -438,6 +280,7 @@ namespace stuff_oscillating
             StopBtn.IsEnabled = true;
             ImpulseBtn.IsEnabled = true;
             PauseButton.IsEnabled = true;
+            SaveButton.IsEnabled = false;
             ToggleTextBoxes(false);
             min = Double.PositiveInfinity;
             max = Double.NegativeInfinity;
@@ -461,14 +304,12 @@ namespace stuff_oscillating
             ImpulseBtn.IsEnabled = false;
             PauseButton.IsEnabled = false;
             ResumeButton.IsEnabled = false;
+            SaveButton.IsEnabled = true;
             ToggleTextBoxes(true);
             Model.Stop();
         }
 
-        private void ImpulseBtn_OnClick(object sender, RoutedEventArgs e)
-        {
-            Model.Impulse = Convert.ToDouble(ImpulseTB.Text);
-        }
+        private void ImpulseBtn_OnClick(object sender, RoutedEventArgs e) => Model.Impulse = Convert.ToDouble(ImpulseTB.Text);
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -487,6 +328,7 @@ namespace stuff_oscillating
             PauseButton.IsEnabled = false;
             ResumeButton.IsEnabled = true;
             ImpulseBtn.IsEnabled = false;
+            SaveButton.IsEnabled = true;
             Model.Pause();
         }
 
@@ -495,6 +337,7 @@ namespace stuff_oscillating
             ResumeButton.IsEnabled = false;
             PauseButton.IsEnabled = true;
             ImpulseBtn.IsEnabled = true;
+            SaveButton.IsEnabled = false;
             Model.Resume();
         }
 
@@ -508,22 +351,6 @@ namespace stuff_oscillating
         }
 
     }
-
-    public class OpacityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (Visibility)value == Visibility.Visible
-                ? 1d
-                : .2d;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 
     public class DataPoint
     {
