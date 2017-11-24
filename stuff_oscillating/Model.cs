@@ -182,7 +182,7 @@ namespace stuff_oscillating
         {
             double time = stopwatch.Elapsed.TotalMilliseconds / 1000;
             double a = -parameters.ω * modelStatus.X - parameters.FrictionCoeffitient * modelStatus.Velocity;
-            a += Impulse;
+            a += Impulse / parameters.ObjectMass;
             Impulse = 0;
             if (parameters.UseForce)
                a += parameters.ForceAmplitude * (1 - Math.Cos(2 * Math.PI * time / parameters.ForcePeriod)) / 2;
